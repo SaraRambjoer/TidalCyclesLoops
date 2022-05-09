@@ -1,0 +1,65 @@
+-- mostly uses SF Celesta, alt. SF Celesta with some slight modifications
+
+-- d minor: D E F G A Bb C D
+-- d minor progressions:
+-- Dmin Bb C (i VI VII)
+-- Dmin Gm C (i vi VII)
+-- Dm Gm AM (i vi v)
+-- Dm Bb F C (i VI II VII)
+-- Em7b5 Am Dm (ii v i) (min7flat5)
+
+-- Chords in general :
+-- i: Dmin, Dmin7
+-- iidim: Edim Em7b5
+-- III: Fmaj, Fmaj7
+-- iv: Gmin, Gmin7
+-- v: Amin Amin7
+-- Vi: Bbmaj, BBmaj7
+-- VII: Cmaj, C7
+
+-- Inversion: add 'i at chord end for each inversion
+hush
+setcycles 1
+
+n "e4'min7flat5"
+-- q=disharmony
+let pat = [
+          ("dmin", n "d4'min"), -- d4 f4 a4
+          ("bfmaj", n "bf4'maj"), -- as4 d5 f5
+          ("cmaj", n "c4'maj"), -- c4 e4 g4
+          ("gmin", n "g4'min"), -- g4 as4 d5
+          ("amin", n "a4'min"), -- a4 c5 e5
+          ("fmaj", n "f4'maj"), -- f4 a4 c5
+          ("em7b5", n "e4'min7flat5"), -- e4 g4 as4 d5
+          ("db", n "d5 as5 d6"),
+          ("bc", n "as5 c5 f5"),
+          ("bcq", n "d6 as5 c5"),
+          ("cd", n "[c5 f5] c5 a5"),
+          ("cdq", n "[c5 f5] d5 f5"),
+          ("dg", n "d6 [as5 a5] d5"),
+          ("gc", n "[c5 as5] e5 g5")
+        ]
+    fx = [
+        ("c1", (# s "midi")),
+        ("c2", (# s "midi2"))
+        ]
+in
+d1 $ ur 4 "[\
+            \[\
+             \[\
+              \[\
+               \dmin:c2 _ bfmaj:c2 cmaj:c2\
+              \],[\
+                 \db:c1 db:c1 [bc:c1|bcq:c1] [cd:c1|cdq:c1]\
+                \]\
+             \]\
+            \]|[\
+               \[\
+                \[\
+                 \dmin:c2 _ gmin:c2 cmaj:c2\
+                \],[\
+                  \db:c1 dg:c1 gc:c1 [cd:c1|cdq:c1]\
+                \]\
+               \]\
+              \]\
+           \]" pat fx
