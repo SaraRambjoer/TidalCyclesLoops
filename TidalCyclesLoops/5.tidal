@@ -1,0 +1,45 @@
+-- d minor: D E F G A Bb C D
+setcps 1
+hush
+
+--- Mostly just trying out more advanced stuff with patterns in compositions
+-- Helm SF Celesta synth
+let pat =
+      [
+        ("a", stack [
+                    n "[[d7 f7@2 a7]|[d7 f7@2 a7]|[d7 f7@2 a7]|[d7 f7 a7@2]|[d7 f7@2 a7]|[d7 f7 ~ af7]|[df7 f7@2 a7]|[d7 f7@2 a7]|[d7 f7@2 a7]|[g6 f7@ a2]|[a7 f7@2 d7]]" # s "midi"
+            ]
+        ),
+        ("b", stack [
+                    n "d7 ~ [f7 f7] d7" # s "midi"
+        ]),
+        ("c", stack [
+                    n "g6 ~ [f7 f7] d7" # s "midi"
+        ]),
+        ("d", stack [
+                    n "[d7 bf6 g6]@2 ~ d7" # s "midi"
+        ]),
+        ("ae", n "d7 [f7 ~] af7@2" # s "midi"),
+        ("e", n "[[af7 a7 a7 af7]|[d7,[af7 af7 ~ af7]]|[a7 f7 af7 a7]]" # s "midi"),
+        ("ed", n "af7 a7 c7 f7" # s "midi")
+      ]
+in
+d1 $ ur 19 "a a a b c a a a d a a ae e e e e ed a d" pat []
+
+let pat2 =
+        [
+        ("a", n "a5 d6 d5"),
+        ("b", n "d6 d6 ~")
+        ]
+    fx = [("o1", (# s "midi"))]
+in
+d1 $ ur 1 "[a:o1|b:o1]" pat2 fx
+
+let pat3 =
+        [
+        ("a", n "a5 d6 d5"),
+        ("b", n "a'min")
+        ]
+    fx = [("o1", (# s "midi"))]
+in
+d1 $ ur 1 "[a:o1,b:o1]" pat3 fx

@@ -1,0 +1,55 @@
+
+setcps (70/60/4)
+hush
+
+resetCycles
+
+-- Tried making a "dungeon synth" type short loop, uising the SF Celesta synth on Helm
+let pat =
+      [
+        ("a", stack [
+                      n "d5'min@2 g5'min a5'min" # s "midi",
+                      n "[[d7 d7] ~ a7 f7]@2 [g7 b7 d7] [a7 c8 e8]" # s "midi2"
+                    ]
+        ),
+        ("b", stack [
+                      n "d5'min@3 ~ a5'min@2 d5'min@2" # s "midi",
+                      n "[[d7 d7] ~ a7 f7]@3 d7 [a7 c7 d7]@2 [d7 ~ [f7 a7] a7@2]@2" # s "midi2"
+                    ]
+        ),
+        ("c", stack [
+                      n "d5'min@2 d5'min'o g5'min" # s "midi",
+                      n "[[d7 d7] [a7 a7] f7]@2 [[d7 d7] ~ a6 f6] [g6 c7 e8]" # s "midi2"
+                    ]
+        ),
+        ("d", stack [
+                    n "d5'min@2 g5'min a5'min" # s "midi",
+                    n "[[d7 d7] ~ a7 fs7]@2 [b7 b7 d7] [a7 c8 e8]" # s "midi2"
+                    ]
+        )
+      ]
+in
+d1 $ ur 12 "a b c a b c d b c" pat []
+hush
+
+
+-- melody without chords
+let pat2 =
+      [
+        ("a", n "[[d7 d7] ~ a7 f7]@2 [g7 b7 d7] [a7 c8 e8]" # s "midi2"),
+        ("b", n "[[d7 d7] ~ a7 f7]@3 d7 [a7 c7 d7]@2 [d7 ~ [f7 a7] a7@2]@2" # s "midi2"),
+        ("c", n "[[d7 d7] [a7 a7] f7]@2 [[d7 d7] ~ a6 f6] [g6 c7 e8]" # s "midi2"),
+        --("d", n "[[[d6 d6] d6] [a6 [c6 ~]]*2 [a5 ~ [c6 g6] a5]@2 ]" # s "midi2"),
+        ("e", n "[[d7 d7] ~ a7 fs7]@2 [b7 b7 d7] [a7 c8 e8]" # s "midi2")
+      ]
+in
+d2 $ ur 12 "a b c a b c e b c" pat2 []
+
+-- Just testing audio effects
+d2 $ jux ((# speed 0.5) . (# pan sine)) $ sometimesBy 0.1 (rev) $ struct ("t(3, 5) [t t] t*2") $ fast 4 $ randslice 8 $ s "samples"
+
+ps y = (587.33 * (1.059463094359**(y)))/587.33
+
+-- Using speed and splicing to cut a sample up and try to play it in a pitch, doesn't really work that well likely due to "base hz" of
+-- frequency not being the assumed freq. 
+d2 $ slice 10 "3 3 10 [10 3] [3 10] 4" $ s "samples:8" # speed (listToPat [(ps 6), (ps 0), (ps 3), (ps 0), (ps 0), (ps 3), (ps 6)])

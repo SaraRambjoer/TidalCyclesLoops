@@ -1,0 +1,45 @@
+-- Short song loop, different speed options
+setcps (70/60/4)
+setcps 1
+do
+  let control = [1, 1, 1]
+  d1 $ sometimesBy 0.1 (# crush 4) $ sometimesBy 0.3 (jux (rev)) $ n "3 [3, 3] [~ 7] [[5, 9]|[0 0]]" # s "popkick" # crush "16 4 16 4" # gain (control!!0)
+  d2 $ every 8 (# gain (0.75*control!!1)) $ s "crow:1" # speed "0.25" # tremdp "[100, 200]" # tremr "[400, 200]" # pan sine # gain "0.0" # shape "0.9" # crush "2"
+  d3 $ jux (# pan (slow 2 sine)) $ every 2 (# gain (0.9*control!!2)) $ s "[rave:3 rave:2] ~ rave:2 ~" # gain "0" # crush (2 + 0.5 * (fast 16 saw))
+
+
+hush
+
+
+
+-- Just trying out stuff with shifting the speed of sound samples to a specific "pitch" by assuming that they have a base pitch of 440 hz
+-- This is probably not the best way of doing this, as in complicated patterns where individual samples have different speeds samples may overlap because they won't have a standarized length
+-- To do this then samples should ideally have the same base length
+pitchshift :: Double -> Double -> Double
+pitchshift x y = (x * (1.059463094359**(y)))/x
+
+pitchshift 440 12.0
+pitchshift 440 1.0
+d4 $ s "rave:2 rave:2 rave:2" # speed (listToPat [1.0, (pitchshift 440 3.0), (pitchshift 440 6.0)])
+
+let pat =
+        [
+            ("a", n "e5 [a5 e5]" # s "superchip" # pitch2 "2"),
+            ("b", n "[e5 g5] [f5s g5 f5s] e5" # s "superchip" # pitch2 "2")
+        ]
+in
+d1 $ ur 2 "a b" pat []
+
+
+d4 $ n "[d4, f4, a4] [b4f, d4, f4] [c4, e4, g4]" # s "midi"
+
+resetCycles
+
+let pat =
+      [
+        ("a", n "d4 f4 a4" # s "midi"),
+        ("c", slow (4/3) $ n "f4 f4 [d4 a4] bf4" # s "midi"),
+        ("b", n "bf4 d4 f4" # s "midi")
+      ]
+in
+d4 $ ur 7 "a a a c b b b" pat []
